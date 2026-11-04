@@ -1,0 +1,6 @@
+.cache/
+public/handlers/
+public/styles/
+node_modules/
+*.log
+.env

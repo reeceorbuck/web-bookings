@@ -1,0 +1,12 @@
+.env
+.git
+.gitignore
+.gitattributes
+.vscode
+.cache
+node_modules
+public/handlers
+public/styles
+Dockerfile
+.dockerignore
+README.md

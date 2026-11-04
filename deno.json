@@ -1,0 +1,40 @@
+{
+  "tasks": {
+    "dev": "deno run -A --env-file=.env --watch=main.tsx,availableSlots.ts serve.ts --lazy",
+    "build": "deno run -A build.ts",
+    "serve": "deno run -A serve.ts",
+    "check": "deno check serve.ts build.ts"
+  },
+  "minimumDependencyAge": {
+    "age": "P1D",
+    "exclude": [
+      "jsr:@tinytools/hono-tools"
+    ]
+  },
+  "imports": {
+    "tinytools": "jsr:@tinytools/hono-tools@0.1.48",
+    "hono": "jsr:@hono/hono@^4.13.16"
+  },
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "tinytools",
+    "jsxPrecompileSkipElements": [
+      "input",
+      "option"
+    ],
+    "lib": [
+      "esnext",
+      "deno.ns",
+      "dom",
+      "dom.iterable",
+      "dom.asynciterable"
+    ]
+  },
+  "lint": {
+    "rules": {
+      "exclude": [
+        "jsx-key"
+      ]
+    }
+  }
+}
