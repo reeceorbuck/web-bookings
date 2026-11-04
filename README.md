@@ -22,10 +22,10 @@ on the tailnet already. The page is at `http://localhost:3035`.
 `Dockerfile` builds the image, and `start.sh` joins the tailnet and starts the
 app. Set these on the host:
 
-| Variable            | Value                                              |
-| ------------------- | -------------------------------------------------- |
-| `TAILSCALE_AUTHKEY` | An ephemeral auth key tagged `tag:remote-bookings` |
-| `WEBSERVER_URL`     | `https://server-sdc.pirate-grouse.ts.net:4443`     |
+| Variable            | Value                                                       |
+| ------------------- | ----------------------------------------------------------- |
+| `TAILSCALE_AUTHKEY` | A reusable, ephemeral auth key tagged `tag:remote-bookings` |
+| `WEBSERVER_URL`     | `https://server-sdc.pirate-grouse.ts.net:4443`              |
 
 `GET /health` answers without touching the tailnet, for the host's health check.
 

@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@hono/hono@^4.13.16": "4.13.16",
-    "jsr:@tinytools/hono-tools@0.1.48": "0.1.48",
+    "jsr:@tinytools/hono-tools@0.1.49": "0.1.49",
     "npm:esbuild-wasm@~0.28.2": "0.28.2",
     "npm:esbuild@~0.28.2": "0.28.2"
   },
@@ -10,8 +10,8 @@
     "@hono/hono@4.13.16": {
       "integrity": "e211ca7541bcbe3a835ec425cb428787f116b54fdc1fe8037077d4531f46c93e"
     },
-    "@tinytools/hono-tools@0.1.48": {
-      "integrity": "2aaaa87e43e85f0436243856b3211ce9449f2f0d2a2940a33855aa8c115658f2",
+    "@tinytools/hono-tools@0.1.49": {
+      "integrity": "e04dd9257846acbca7df3d2291e744b4afbd9d57f89141239fcb61818679b15a",
       "dependencies": [
         "jsr:@hono/hono",
         "jsr:@tinytools/hono-tools",
@@ -192,7 +192,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@hono/hono@^4.13.16",
-      "jsr:@tinytools/hono-tools@0.1.48"
+      "jsr:@tinytools/hono-tools@0.1.49"
     ]
   }
 }
