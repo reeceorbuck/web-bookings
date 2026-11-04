@@ -47,6 +47,23 @@ const pageStyles = new tiny.Styles({
       border-top: 1px solid
         light-dark(oklch(90% 0.012 190), oklch(31% 0.012 190));
     }
+
+    form {
+      display: flex;
+      gap: 8px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 8px;
+      font: inherit;
+    }
+
+    button {
+      padding: 8px 16px;
+      font: inherit;
+    }
   `,
 });
 
@@ -100,19 +117,61 @@ export const app = new Hono()
 
 app.get("/health", (c) => c.text("ok"));
 
-app.get("/", async (c) => {
-  const slots = await getAvailableSlots().catch((error) => {
+function CodeForm({ rejected }: { rejected?: boolean }) {
+  return (
+    <>
+      <h1>Book an appointment</h1>
+      <p>
+        {rejected
+          ? "That code wasn't recognised. Check it and try again, or call the practice for a new one."
+          : "Enter the booking code we sent you to see available times."}
+      </p>
+      <form method="get" action="/">
+        <input
+          name="code"
+          required
+          autocomplete="off"
+          aria-label="Booking code"
+        />
+        <button type="submit">Continue</button>
+      </form>
+    </>
+  );
+}
+
+const title = "Book an appointment · Sorrento Dental";
+
+app.get("/", (c) => {
+  const code = c.req.query("code")?.trim();
+  if (code) return c.redirect(`/${encodeURIComponent(code)}`);
+  return c.render(<CodeForm />, { title });
+});
+
+// Only what a code can contain, so requests like /favicon.ico never get here.
+app.get("/:code{[A-Za-z0-9_-]+}", async (c) => {
+  const slots = await getAvailableSlots(c.req.param("code")).catch((error) => {
     console.error(error);
-    return null;
+    return "unavailable" as const;
   });
-  if (!slots) c.status(502);
+  if (slots === "unavailable") {
+    c.status(502);
+    return c.render(
+      <>
+        <h1>Available appointments</h1>
+        <p>Available times can't be loaded right now.</p>
+      </>,
+      { title },
+    );
+  }
+  if (!slots) {
+    c.status(403);
+    return c.render(<CodeForm rejected />, { title });
+  }
   return c.render(
     <>
       <h1>Available appointments</h1>
-      {slots
-        ? <Slots slots={slots} />
-        : <p>Available times can't be loaded right now.</p>}
+      <Slots slots={slots} />
     </>,
-    { title: "Available appointments · Sorrento Dental" },
+    { title },
   );
 });

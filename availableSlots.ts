@@ -4,31 +4,36 @@ export type AvailableSlot = {
   endTime: Temporal.PlainDateTime;
 };
 
-type SlotResponse = Record<
-  string,
-  { operator: string; startTime: string; endTime: string }[]
->;
-
 /**
- * The times offered to patients, earliest first. The web server works them
- * out, and it's only reachable over the tailnet.
+ * The times offered to a booking code's holder, earliest first, or null if the
+ * web server doesn't accept the code. The web server decides both, and it's only
+ * reachable over the tailnet.
  */
-export async function getAvailableSlots(): Promise<AvailableSlot[]> {
+export async function getAvailableSlots(
+  code: string,
+): Promise<AvailableSlot[] | null> {
   const response = await fetch(
-    `${Deno.env.get("WEBSERVER_URL")}/appointment/available?excludeHeld=true`,
-    { signal: AbortSignal.timeout(10_000) },
+    `${Deno.env.get("WEBSERVER_URL")}/appointment/booking-options`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+      signal: AbortSignal.timeout(10_000),
+    },
   );
+  if (response.status === 403) {
+    await response.body?.cancel();
+    return null;
+  }
   if (!response.ok) {
     throw new Error(`Error getting available slots: ${response.status}`);
   }
-  const { assorted } = await response.json() as { assorted: SlotResponse };
-  return Object.values(assorted).flat()
-    .map(({ operator, startTime, endTime }) => ({
-      operator,
-      startTime: Temporal.PlainDateTime.from(startTime),
-      endTime: Temporal.PlainDateTime.from(endTime),
-    }))
-    .toSorted((a, b) =>
-      Temporal.PlainDateTime.compare(a.startTime, b.startTime)
-    );
+  const { slots } = await response.json() as {
+    slots: { operator: string; startTime: string; endTime: string }[];
+  };
+  return slots.map(({ operator, startTime, endTime }) => ({
+    operator,
+    startTime: Temporal.PlainDateTime.from(startTime),
+    endTime: Temporal.PlainDateTime.from(endTime),
+  }));
 }

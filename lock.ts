@@ -1,4 +1,5 @@
-import { dirname, fromFileUrl, join } from "jsr:@std/path@^1.1.6";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // remote is a member of the tinyTools workspace, so running deno here writes a
 // workspace-shaped lockfile. The image is built from this repo alone and expects
@@ -6,7 +7,7 @@ import { dirname, fromFileUrl, join } from "jsr:@std/path@^1.1.6";
 // The age policy can only be configured outside a workspace too, and our own
 // package is exempt from it so that a new release can be deployed straight away.
 
-const remoteDir = dirname(fromFileUrl(import.meta.url));
+const remoteDir = dirname(fileURLToPath(import.meta.url));
 
 async function run(command: string, args: string[], cwd: string) {
   const { success, code, stdout } = await new Deno.Command(command, {

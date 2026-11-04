@@ -1,15 +1,18 @@
 # Remote bookings
 
-The online booking page, hosted outside the practice's network. This is a proof
-of concept: it lists the available appointments and nothing else, and doesn't
-ask for a booking code yet.
+The online booking page, hosted outside the practice's network. A patient opens
+it with their booking code and sees the available appointments. It can't make a
+booking yet.
+
+The web server checks each code and returns only times, so this app never
+receives patient details.
 
 The app holds no database credentials. It joins the tailnet and gets the times
 from the web server (the `webServer` project on the practice server), which also
 supplies them to dental:
 
 ```
-patient -> this app (container host) -> tailnet -> web server :4443 -> MySQL
+patient -> this app (container host) -> tailnet -> web server :4444 -> MySQL
 ```
 
 ## Run locally
@@ -25,7 +28,7 @@ app. Set these on the host:
 | Variable            | Value                                                       |
 | ------------------- | ----------------------------------------------------------- |
 | `TAILSCALE_AUTHKEY` | A reusable, ephemeral auth key tagged `tag:remote-bookings` |
-| `WEBSERVER_URL`     | `https://server-sdc.pirate-grouse.ts.net:4443`              |
+| `WEBSERVER_URL`     | `https://server-sdc.pirate-grouse.ts.net:4444`              |
 
 `GET /health` answers without touching the tailnet, for the host's health check.
 
@@ -45,11 +48,12 @@ tailnet policy, declare the tag and allow it only the web server's port:
     {
       "src": ["tag:remote-bookings"],
       "dst": ["server-sdc"],
-      "ip": ["tcp:4443"]
+      "ip": ["tcp:4444"]
     }
   ]
 }
 ```
 
-The web server doesn't authenticate its routes, so this limits the node to the
-port, not to the appointment routes.
+That port serves only the routes that check a booking code. The web server's
+main port, 4443, doesn't authenticate its routes, so this app must never be
+allowed to reach it.
