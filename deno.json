@@ -3,13 +3,8 @@
     "dev": "deno run -A --env-file=.env --watch=main.tsx,availableSlots.ts serve.ts --lazy",
     "build": "deno run -A build.ts",
     "serve": "deno run -A serve.ts",
-    "check": "deno check serve.ts build.ts"
-  },
-  "minimumDependencyAge": {
-    "age": "P1D",
-    "exclude": [
-      "jsr:@tinytools/hono-tools"
-    ]
+    "check": "deno check serve.ts build.ts",
+    "lock": "deno run -A lock.ts"
   },
   "imports": {
     "tinytools": "jsr:@tinytools/hono-tools@0.1.48",

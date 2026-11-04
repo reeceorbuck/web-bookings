@@ -29,6 +29,9 @@ app. Set these on the host:
 
 `GET /health` answers without touching the tailnet, for the host's health check.
 
+The image installs from `deno.lock`. Run `deno task lock` after changing a
+dependency, including after a tinytools release moves the pin.
+
 ## Tailnet access
 
 This app faces the public internet, so limit what its node can reach. In the

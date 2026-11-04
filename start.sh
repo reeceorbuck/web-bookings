@@ -15,4 +15,4 @@ tailscale --socket=/tmp/tailscaled.sock up \
   --auth-key="${TAILSCALE_AUTHKEY}" \
   --hostname=remote-bookings
 
-HTTPS_PROXY=http://localhost:1055 exec deno run -A serve.ts
+HTTPS_PROXY=http://localhost:1055 exec deno run --frozen --minimum-dependency-age 0 -A serve.ts

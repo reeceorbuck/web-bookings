@@ -11,7 +11,8 @@ COPY --from=docker.io/tailscale/tailscale:stable /usr/local/bin/tailscale /usr/l
 
 WORKDIR /app
 COPY . .
-RUN chmod +x start.sh && deno task build
+# The lockfile pins every dependency, so the age policy has nothing to add.
+RUN chmod +x start.sh && deno run --frozen --minimum-dependency-age 0 -A build.ts
 
 EXPOSE 8000
 ENV PORT=8000
