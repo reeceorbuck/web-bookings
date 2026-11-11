@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -25,7 +26,10 @@ const files = (await run("git", [
   "--cached",
   "--others",
   "--exclude-standard",
-], remoteDir)).split("\n").filter(Boolean);
+], remoteDir)).split("\n").filter((file) =>
+  // A file deleted but not yet committed is still listed.
+  file && existsSync(join(remoteDir, file))
+);
 
 const tempDir = await Deno.makeTempDir({ prefix: "remote-lock-" });
 try {

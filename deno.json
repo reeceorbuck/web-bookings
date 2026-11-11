@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run -A --env-file=.env --watch=main.tsx,availableSlots.ts serve.ts --lazy",
+    "dev": "deno run -A --env-file=.env --watch=main.tsx,onlineBookings.ts,components serve.ts --lazy",
     "build": "deno run -A build.ts",
     "serve": "deno run -A serve.ts",
     "check": "deno check serve.ts build.ts",

@@ -1,15 +1,16 @@
 # Remote bookings
 
 The online booking page, hosted outside the practice's network. A patient opens
-it with their booking code and sees the available appointments. It can't make a
-booking yet.
+it with their booking code, chooses a time and reserves it, or asks to hear about
+times that aren't offered yet. It's the patient side of dental's `/bookings`
+route, without the staff simulation or the patient's name and recall details.
 
-The web server checks each code and returns only times, so this app never
-receives patient details.
+The web server checks each code and does the reserving, and returns only times,
+so this app never receives patient details.
 
-The app holds no database credentials. It joins the tailnet and gets the times
-from the web server (the `webServer` project on the practice server), which also
-supplies them to dental:
+The app holds no database credentials. It joins the tailnet and does everything
+through the web server (the `webServer` project on the practice server), which
+also supplies dental's times:
 
 ```
 patient -> this app (container host) -> tailnet -> web server :4444 -> MySQL
