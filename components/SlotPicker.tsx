@@ -110,7 +110,7 @@ export async function SlotPicker(
   },
 ) {
   const values = pickerValues();
-  const { signal, styled, signalRoot } = await tiny.imports(
+  const { signal, styled, SignalRoot } = await tiny.imports(
     pickerStyles,
     pickerSignals.withInputs(undefined, pickerSeedValues(values)),
   );
@@ -118,7 +118,7 @@ export async function SlotPicker(
   const confirmation = component.instance();
 
   return (
-    <signalRoot.self>
+    <SignalRoot>
       <slot-picker
         class={styled.picker}
       >
@@ -185,6 +185,6 @@ export async function SlotPicker(
           </a>.
         </booking-notice>
       </slot-picker>
-    </signalRoot.self>
+    </SignalRoot>
   );
 }
